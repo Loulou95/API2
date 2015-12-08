@@ -1,11 +1,22 @@
-> db.wines.insert({ name: "Blossom Hill" Year: [ "2009" ], Country: ["France"], Description: ["Fruity Rose"] } )
-  WriteResult({ "nInserted" : 1 })
-> db.wines.insert( { name: "Blossom Hill", Year: [ "2006" ], Country: ["France"], Description: ["Fruity Rose"] } )
-  WriteResult({ "nInserted" : 1 })
-> db.wines.insert( { name: "Castillo San Lorenzo Rioja Gran Reserva " Year: [ "2010" ], Country: ["France"], Description: ["Fruity Rose"] } )
-  WriteResult({ "nInserted" : 1 })
-  
-  db.wines.find()
-  { "_id" : ObjectId("5638d8b8cabb5db66a09d33a"), "name": "Blossom Hill" Year: [ "2009" ], Country: ["France"], Description: ["Fruity Rose"] }
-  { "_id" : ObjectId("5638d98bcabb5db66a09d33b"), "name": "Blossom Hill", Year: [ "2006" ], Country: ["France"], Description: ["Fruity Rose"] }
-  { "_id" : ObjectId("5638d9cbcabb5db66a09d33c"), "name": "Castillo San Lorenzo Rioja Gran Reserva" Year: [ "2010" ], Country: ["France"], Description: ["Fruity Rose"] }
+var request = require('request')
+
+var wines = 'party';
+
+exports.search = function(query, callback) {
+  console.log('search')
+  if (typeof query !== 'string' || query.length === 0) {
+    callback({code:400, response:{status:'error', message:'missing query (q parameter)'}})
+  }
+  request.get({uri: 'http://api.snooth.com/wines/?akey=lazxs666bqts6whznbo61zal1yj06n4c4w09hn3ndm4z8dws', qs: {t: wines }}, function (error, response, body) { 
+    if (!error && response.statusCode == 200) {
+      console.log(body); 
+      console.log(typeof body)
+      const json = JSON.parse(body)
+      const wines = json.wines.map(function(element) {
+        return {wines:element.name}
+      })
+      console.log(wines)
+      callback({code:200, response:{status:'success', message:wines.length+' wines found', data:wines}})
+    }
+  })
+}

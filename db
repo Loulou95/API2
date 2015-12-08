@@ -1,0 +1,4 @@
+MongoDB shell version: 2.6.11
+connecting to: test
+2015-12-04T15:19:51.836+0000 warning: Failed to connect to 127.0.0.1:27017, reason: errno:111 Connection refused
+2015-12-04T15:19:51.838+0000 Error: couldn't connect to server 127.0.0.1:27017 (127.0.0.1), connection attempt failed at src/mongo/shell/mongo.js:146
